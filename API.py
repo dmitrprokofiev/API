@@ -1,10 +1,20 @@
 import requests
 from pprint import pprint
 
-username = 'dmitrprokofiev'
-url = f"https://api.github.com/users/{username}/repos"
-response = requests.get(url).json()
-# 'html_url': 'https://github.com/dmitrprokofiev/API' - tag
-# pprint(response[0]['html_url'])
-result = [i['html_url'] for i in response]
-print('\n'.join(result))
+# username = 'dmitrprokofiev'
+# url = f"https://api.github.com/users/{username}/repos"
+# response = requests.get(url).json()
+#
+# result = [i['html_url'] for i in response]
+# print('\n'.join(result))
+
+class Repo:
+    def __init__(self, username):
+        self.username = username
+
+    def parce(self):
+        url = f"https://api.github.com/users/{self.username}/repos"
+        response = requests.get(url).json()
+        result = [i['html_url'] for i in response]
+        return result
+

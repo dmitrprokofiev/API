@@ -18,5 +18,8 @@ class Repo:
         result = [i['html_url'] for i in response]
         return result
 
+    def output(self):
+        print(self.parce())
+
 Dmitrii = Repo('dmitrprokofiev')
-print(Dmitrii.parce())
+Dmitrii.output()

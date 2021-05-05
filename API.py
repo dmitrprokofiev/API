@@ -19,7 +19,7 @@ class Repo:
         return result
 
     def output(self):
-        print(self.parce())
-
+        print(f"У пользователя {self.username} имеется {len(self.parce())} репозиториев:{', '.join(self.parce())}")
+              #TO DO добавить \n
 Dmitrii = Repo('dmitrprokofiev')
 Dmitrii.output()

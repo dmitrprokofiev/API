@@ -22,14 +22,15 @@ class Repo:
         return result
 
     def output(self): # выводим в удобочитаемый вид
-        print(f"У пользователя {self.username} имеется {len(self.result_parce())} репозиториев:{', '.join(self.result_parce())}")
-              #TO DO добавить \n
+        print('У пользователя {} имеется {} репозиториев:{}{}'.format(self.username, len(self.result_parce()), '\n', '\n'.join(self.result_parce())))
 
     def save_json(self): # сохраняем в json-файл
         with open('repo_{}.json'.format(self.username), 'w', encoding='utf-8') as js:
             js.write(json.dumps(self.parce().json(), ensure_ascii=False))
 
 Dmitrii = Repo('dmitrprokofiev')
-# Apache = Repo('apache')
+Book = Repo('EbookFoundation')
 Dmitrii.output()
-# Dmitrii.save_json()
+Dmitrii.save_json()
+Book.output()
+"""Извлекаются только репозитории на первой странице. Как извлечь данные со всех страниц пока не знаю """

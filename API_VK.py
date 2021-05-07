@@ -7,7 +7,7 @@ class VK:
     def __init__(self, id):
         self.id = id
 
-    def friends_get(self):
+    def friends_get(self): #список друзей
         url = 'https://api.vk.com/method/friends.get?user_id={}&fields=bdate&access_token={}&v=5.130'.format(self.id, self._acces_token)
         response = requests.get(url)
         response = response.json()
@@ -21,9 +21,13 @@ class VK:
         for i in response['response']['profiles']:
             print(i['first_name'], i['last_name'])
 
+    def groups(self):
+        url = 'https://api.vk.com/method/groups.get?user_id={}&extended=1&access_token={}&v=5.130'.format(self.id, self._acces_token)
+        response = requests.get(url)
+        response = response.json()
+        for i in response['response']['items']:
+            print(i['name'])
+
 Buchkin = VK('46454373')
 Ageev = VK('134066584')
-Dmitrii = VK('320944047')
-# pprint(Buchkin.friends_get())
-# print(Buchkin.bannned())
-pprint(Dmitrii.friends_get())
+ex = VK('300690480')

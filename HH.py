@@ -24,7 +24,7 @@ class HH:
     def __init__(self, search):
         self.search = search
 
-    def get_parce(self):
+    def get_parce(self): # проверка на ответ о сервера
         self.params['text'] = self.search
         while True:
             response = requests.get(self.url, headers=self.headers, params=self.params)
@@ -32,14 +32,14 @@ class HH:
                 return response
             time.sleep(0.5)
 
-    def search_result(self):
+    def search_result(self): # выводит количество найденных вакансий
         dom = bs(self.get_parce().text, "html.parser")
         s_list = dom.find_all('h1', class_='bloko-header-1')
         k = [[s for s in i.text if s.isdigit()] for i in s_list]
         k = ''.join(k[0])
         return int(k)
 
-    def get_link(self):
+    def get_link(self): # парсит ссылки вакансий
         result = []
         for i in range(self.search_result() // 50 + 1):
             self.params['page'] = i
@@ -49,7 +49,7 @@ class HH:
                 result.append(str(p).split()[5][6:-1])
         return pd.DataFrame(result)
 
-    def get_post(self):
+    def get_post(self): # парсит наименование вакансий
         result = []
         for i in range(self.search_result()//50+1):
             self.params['page'] = i
@@ -59,18 +59,17 @@ class HH:
                 result.append(i.text)
         return pd.DataFrame(result)
 
-    def pay(self):
-        # vacancy-serp-item__sidebar
+    def pay(self):  # парсит зарплаты
         dom = bs(self.get_parce().text, "html.parser")
-        s_list = dom.find_all('div', class_='vacancy-serp-item__sidebar')
+        s_list = dom.find_all('div', class_='vacancy-serp-item__row_header')
         return s_list
 
-    def df_view(self):
+    def df_view(self): # объединяет данные в твблицу
         return pd.concat([self.get_post(), self.get_link()], axis=1)
 
-    def import_xls(self):
+    def import_xls(self): # импртирует, полученные данные в файл
         pass
 
-rust = HH('ФСБ')
-pprint(rust.df_view())
+rust = HH('учитель танцев')
+pprint(rust.pay())
 

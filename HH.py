@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from pprint import pprint
 import pandas as pd
+import time
 
 # headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
 # url = 'https://spb.hh.ru/search/vacancy?clusters=true&enable_snippets=true&salary=&st=searchVacancy&text=rust&showClusters=true&page=1'
@@ -25,11 +26,11 @@ class HH:
 
     def get_parce(self):
         self.params['text'] = self.search
-        response = requests.get(self.url, headers=self.headers, params=self.params)
-        if response.status_code == 200:
-            return response
-        else:
-            raise ValueError('Сервер не отвечает')
+        while True:
+            response = requests.get(self.url, headers=self.headers, params=self.params)
+            if response.status_code == 200:
+                return response
+            time.sleep(0.5)
 
     def search_result(self):
         dom = bs(self.get_parce().text, "html.parser")
@@ -59,7 +60,10 @@ class HH:
         return pd.DataFrame(result)
 
     def pay(self):
-        pass
+        # vacancy-serp-item__sidebar
+        dom = bs(self.get_parce().text, "html.parser")
+        s_list = dom.find_all('div', class_='vacancy-serp-item__sidebar')
+        return s_list
 
     def df_view(self):
         return pd.concat([self.get_post(), self.get_link()], axis=1)
@@ -67,6 +71,6 @@ class HH:
     def import_xls(self):
         pass
 
-rust = HH('путешественник')
+rust = HH('ФСБ')
 pprint(rust.df_view())
 

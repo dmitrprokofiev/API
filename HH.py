@@ -7,8 +7,7 @@ import pandas as pd
 # url = 'https://spb.hh.ru/search/vacancy?clusters=true&enable_snippets=true&salary=&st=searchVacancy&text=rust&showClusters=true&page=1'
 # response = requests.get(url, headers=headers)
 # dom = bs(response.text, "html.parser")
-# s_list = dom.find_all(class_='resume-search-item__name')
-# pprint([i for i in s_list])
+# s_list = dom.find_all('h1', class_='bloko-header-1')
 
 
 class HH:
@@ -32,6 +31,14 @@ class HH:
         else:
             raise ValueError('Сервер не отвечает')
 
+    def search_result(self):
+        dom = bs(self.get_parce().text, "html.parser")
+        s_list = dom.find_all('h1', class_='bloko-header-1')
+        k = [[s for s in i.text if s.isdigit()] for i in s_list]
+        k = ''.join(k[0])
+        return int(k)
+
+
     def get_post(self):
         dom = bs(self.get_parce().text, "html.parser")
         s_list = dom.find_all(class_='resume-search-item__name')
@@ -44,7 +51,7 @@ class HH:
 
     def page(self):
         result = []
-        for i in range(3):
+        for i in range(self.search_result()//50+1):
             self.params['page'] = i
             dom = bs(self.get_parce().text, "html.parser")
             page_list = dom.find_all(class_='resume-search-item__name')
@@ -63,3 +70,4 @@ class HH:
 
 rust = HH('rust')
 pprint(rust.page())
+

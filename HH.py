@@ -1,3 +1,5 @@
+import termios
+
 from bs4 import BeautifulSoup as bs
 import requests
 from pprint import pprint
@@ -72,8 +74,8 @@ class HH:
 
     def pay(self):  # парсит зарплаты
         dom = bs(self.get_parce().text, "html.parser")
-        s_list = dom.find_all('div', class_='vacancy-serp-item__row_header')
-        return s_list
+        s_list = dom.find_all('span', {'data-qa':'vacancy-serp__vacancy-compensation'})
+        return [i.text for i in s_list]
 
     def df_view(self): # объединяет данные в твблицу
         return pd.concat([self.get_post(), self.get_link()], axis=1)
@@ -82,5 +84,5 @@ class HH:
         pass
 
 rust = HH('учитель танцев')
-pprint(rust.get_link_href())
+pprint(rust.pay())
 

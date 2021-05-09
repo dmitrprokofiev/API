@@ -33,7 +33,7 @@ class HH:
             response = requests.get(self.url, headers=self.headers, params=self.params)
             if response.status_code == 200:
                 return response
-            time.sleep(0.5)
+            time.sleep(1)
 
     def search_result(self): # выводит количество найденных вакансий
         dom = bs(self.get_parce().text, "html.parser")
@@ -73,16 +73,28 @@ class HH:
         return pd.DataFrame(result)
 
     def pay(self):  # парсит зарплаты
-        dom = bs(self.get_parce().text, "html.parser")
-        s_list = dom.find_all('span', {'data-qa':'vacancy-serp__vacancy-compensation'})
-        return [i.text for i in s_list]
+        result = []
+        for x in range(self.search_result()//50+1):
+            self.params['page'] = x
+            dom = bs(self.get_parce().text, "html.parser")
+            s_list = dom.find_all('div', {'class':'vacancy-serp-item'})
+            s = [i.find('span', {'data-qa':'vacancy-serp__vacancy-compensation'}) for i in s_list]
+            for i in s:
+                if i == None:
+                    result.append(i)
+                else:
+                    result.append(i.text)
+        return pd.DataFrame(result)
 
     def df_view(self): # объединяет данные в твблицу
-        return pd.concat([self.get_post(), self.get_link()], axis=1)
+        return pd.concat([self.get_post(), self.get_link(), self.pay()], axis=1)
 
-    def import_xls(self): # импортирует, полученные данные в файл
-        pass
+    def import_xls(self): # импортирует, полученные данные в файл xlsx
+        self.df_view().to_excel(f'{self.search}.xlsx')
+
+    def import_csv(self):
+        self.df_view().to_csv(f'{self.search}.csv')
 
 rust = HH('учитель танцев')
-pprint(rust.pay())
+pprint(rust.import_csv())
 

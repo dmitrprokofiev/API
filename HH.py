@@ -38,18 +38,17 @@ class HH:
         k = ''.join(k[0])
         return int(k)
 
+    def get_link(self):
+        result = []
+        for i in range(self.search_result() // 50 + 1):
+            self.params['page'] = i
+            dom = bs(self.get_parce().text, "html.parser")
+            page_list = dom.find_all(class_='resume-search-item__name')
+            for p in page_list:
+                result.append(str(p).split()[5][6:-1])
+        return pd.DataFrame(result)
 
     def get_post(self):
-        dom = bs(self.get_parce().text, "html.parser")
-        s_list = dom.find_all(class_='resume-search-item__name')
-        return pd.DataFrame([i.text for i in s_list])
-
-    def get_link(self):
-        dom = bs(self.get_parce().text, "html.parser")
-        s_list = dom.find_all(class_='resume-search-item__name')
-        return pd.DataFrame([str(i).split()[5][6:-1] for i in s_list])
-
-    def page(self):
         result = []
         for i in range(self.search_result()//50+1):
             self.params['page'] = i
@@ -68,6 +67,6 @@ class HH:
     def import_xls(self):
         pass
 
-rust = HH('rust')
-pprint(rust.page())
+rust = HH('путешественник')
+pprint(rust.df_view())
 

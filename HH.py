@@ -84,9 +84,10 @@ class HH:
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel(f'{self.search}.xlsx')
 
-    def import_csv(self): #есть проблема в присутствии спецсимвола   в зарплате
+    def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
         self.df_view().to_csv(f'{self.search}.csv')
 
 teacher = HH('учитель танцев')
 teacher.import_xls()
+
 

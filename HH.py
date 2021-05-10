@@ -1,18 +1,10 @@
-import termios
 
 from bs4 import BeautifulSoup as bs
 import requests
 from pprint import pprint
 import pandas as pd
 import time
-
-# headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
-# url = 'https://spb.hh.ru/search/vacancy?clusters=true&enable_snippets=true&salary=&st=searchVacancy&text=rust&showClusters=true&page=1'
-# response = requests.get(url, headers=headers)
-# dom = bs(response.text, "html.parser")
-# s_list = dom.find_all('a', {'data-qa' : 'vacancy-serp__vacancy-title'})
-# pprint([i.get('href') for i in s_list])
-
+import openpyxl
 
 class HH:
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
@@ -33,7 +25,7 @@ class HH:
             response = requests.get(self.url, headers=self.headers, params=self.params)
             if response.status_code == 200:
                 return response
-            time.sleep(1)
+            time.sleep(2)
 
     def search_result(self): # выводит количество найденных вакансий
         dom = bs(self.get_parce().text, "html.parser")
@@ -92,9 +84,9 @@ class HH:
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel(f'{self.search}.xlsx')
 
-    def import_csv(self):
+    def import_csv(self): #есть проблема в присутствии спецсимвола   в зарплате
         self.df_view().to_csv(f'{self.search}.csv')
 
-rust = HH('учитель танцев')
-pprint(rust.import_csv())
+teacher = HH('учитель танцев')
+teacher.import_xls()
 

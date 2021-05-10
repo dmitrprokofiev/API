@@ -76,22 +76,25 @@ class HH:
                     result.append(i)
                 else:
                     result.append(i.text)
-        return pd.DataFrame(result)
+        return result
 
-    def pay_iterate(self):
+    def pay_iterate(self): # извлекаем зарплату
         result = []
         for i in self.pay():
             if i == None:
+                i = [None, None]
                 result.append(i)
             else:
                 m_1 = ''.join(i.split('\u202f'))
-                m_2 = [''.join((i.split())) for i in m_1 if i.isdigit()]
-                m_3 = [i for i in ''.join(m_2)]
-                result.append(m_3)
-        return result
+                m_2 = [i for i in m_1.split() if i.isdigit()]
+                result.append(m_2)
+        for i in result:
+            if len(i) == 1:
+                i.append(i[0])
+        return pd.DataFrame(result)
 
     def df_view(self): # объединяет данные в твблицу
-        return pd.concat([self.get_post(), self.get_link(), self.pay()], axis=1)
+        return pd.concat([self.get_post(), self.get_link(), self.pay_iterate()], axis=1)
 
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel(f'{self.search}.xlsx')
@@ -100,7 +103,7 @@ class HH:
         self.df_view().to_csv(f'{self.search}.csv')
 
 teacher = HH('учитель музыки')
-pprint(teacher.pay())
+pprint(teacher.import_csv())
 
 
 # m = ['110\u202f000 – 160\u202f000 руб.',

@@ -76,7 +76,19 @@ class HH:
                     result.append(i)
                 else:
                     result.append(i.text)
-        return pd.DataFrame(result)
+        return result
+
+    def pay_iterate(self):
+        result = []
+        for i in self.pay():
+            if i == None:
+                result.append(i)
+            else:
+                m_1 = ''.join(i.split('\u202f'))
+                m_2 = [''.join((i.split())) for i in m_1 if i.isdigit()]
+                m_3 = [i for i in ''.join(m_2)]
+                result.append(m_3)
+        return result
 
     def df_view(self): # объединяет данные в твблицу
         return pd.concat([self.get_post(), self.get_link(), self.pay()], axis=1)
@@ -87,7 +99,14 @@ class HH:
     def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
         self.df_view().to_csv(f'{self.search}.csv')
 
-teacher = HH('учитель танцев')
-teacher.import_xls()
+teacher = HH('учитель музыки')
+pprint(teacher.pay_iterate())
 
 
+# m = ['110\u202f000 – 160\u202f000 руб.',
+#  '40\u202f000 – 80\u202f000 руб.',
+#  '50\u202f000 – 70\u202f000 руб.', 'до 15\u202f000 руб.']
+# m_1 = [''.join(i.split('\u202f')) for i in m]
+# m_2 = [i.split() for i in m_1]
+# m_3 = [[s for s in i if s.isdigit()] for i in m_2]
+# pprint(m_3)

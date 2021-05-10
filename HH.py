@@ -78,7 +78,7 @@ class HH:
                     result.append(i.text)
         return result
 
-    def pay_iterate(self): # извлекаем зарплату
+    def pay_iterate(self): # извлекаем зарплату отельно друг от друга
         result = []
         for i in self.pay():
             if i == None:
@@ -105,11 +105,3 @@ class HH:
 teacher = HH('учитель музыки')
 pprint(teacher.import_csv())
 
-
-# m = ['110\u202f000 – 160\u202f000 руб.',
-#  '40\u202f000 – 80\u202f000 руб.',
-#  '50\u202f000 – 70\u202f000 руб.', 'до 15\u202f000 руб.']
-# m_1 = [''.join(i.split('\u202f')) for i in m]
-# m_2 = [i.split() for i in m_1]
-# m_3 = [[s for s in i if s.isdigit()] for i in m_2]
-# pprint(m_3)

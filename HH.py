@@ -8,7 +8,7 @@ import openpyxl
 
 class HH:
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
-    url = 'https://spb.hh.ru/search/vacancy?clusters=true'
+    url = 'https://hh.ru/search/vacancy?clusters=true'
     params = {'enable_snippets' : 'true',
               'salary' : None,
               'st' : 'searchVacancy',
@@ -76,7 +76,7 @@ class HH:
                     result.append(i)
                 else:
                     result.append(i.text)
-        return result
+        return pd.DataFrame(result)
 
     def pay_iterate(self):
         result = []
@@ -100,7 +100,7 @@ class HH:
         self.df_view().to_csv(f'{self.search}.csv')
 
 teacher = HH('учитель музыки')
-pprint(teacher.pay_iterate())
+pprint(teacher.pay())
 
 
 # m = ['110\u202f000 – 160\u202f000 руб.',

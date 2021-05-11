@@ -54,9 +54,14 @@ class SuperJob:
         return pd.DataFrame(k)
 
     def pay(self):  # парсит зарплаты
+        result = []
         dom = bs(self.get_parce().text, "html.parser")
         s_list = dom.find_all('span', class_='_2Wp8I')
-        return [i.text.replace('\xa0', '') for i in s_list]
+        l = [i.text.replace('\xa0', '') for i in s_list]
+        zp = [''.join([s for s in i if s.isdigit()]) for i in l]
+        for i in zp:
+            if len(i) > 7:
+                pass
 
     def df_view(self): # объединяет данные в твблицу
         pass

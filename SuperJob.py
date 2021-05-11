@@ -47,7 +47,20 @@ class SuperJob:
                 result.append(self.url[:26] + p.get('href'))
         return pd.DataFrame(result)
 
+    def get_post(self):  # парсит наименование вакансий
+        pass
 
+    def pay(self):  # парсит зарплаты
+        pass
+
+    def df_view(self): # объединяет данные в твблицу
+        pass
+
+    def import_xls(self): # импортирует, полученные данные в файл xlsx
+        pass
+
+    def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
+        pass
 
 
 kuznec = SuperJob('лесник')

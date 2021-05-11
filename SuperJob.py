@@ -48,14 +48,15 @@ class SuperJob:
         return pd.DataFrame(result)
 
     def get_post(self):  # парсит наименование вакансий
-        result = []
         dom = bs(self.get_parce().text, "html.parser")
         s_list = dom.find_all('a', class_='_6AfZ9')
         k = [i.text for i in s_list]
         return pd.DataFrame(k)
 
     def pay(self):  # парсит зарплаты
-        pass
+        dom = bs(self.get_parce().text, "html.parser")
+        s_list = dom.find_all('span', class_='_2Wp8I')
+        return [i.text.replace('\xa0', '') for i in s_list]
 
     def df_view(self): # объединяет данные в твблицу
         pass
@@ -63,9 +64,9 @@ class SuperJob:
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         pass
 
-    def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
+    def import_csv(self):
         pass
 
 
 kuznec = SuperJob('лесник')
-pprint(kuznec.get_post())
+pprint(kuznec.pay())

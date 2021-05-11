@@ -48,7 +48,11 @@ class SuperJob:
         return pd.DataFrame(result)
 
     def get_post(self):  # парсит наименование вакансий
-        pass
+        result = []
+        dom = bs(self.get_parce().text, "html.parser")
+        s_list = dom.find_all('a', class_='_6AfZ9')
+        k = [i.text for i in s_list]
+        return pd.DataFrame(k)
 
     def pay(self):  # парсит зарплаты
         pass
@@ -64,4 +68,4 @@ class SuperJob:
 
 
 kuznec = SuperJob('лесник')
-pprint(kuznec.get_link_href())
+pprint(kuznec.get_post())

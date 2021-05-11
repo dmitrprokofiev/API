@@ -42,10 +42,13 @@ class SuperJob:
         for i in range(self.search_result() // 20 + 1):
             self.params['page'] = i
             dom = bs(self.get_parce().text, "html.parser")
-            page_list = dom.find_all('a', {'data-qa' : 'vacancy-serp__vacancy-title'})
+            page_list = dom.find_all('a', class_='_6AfZ9')
             for p in page_list:
-                result.append(p.get('href'))
+                result.append(self.url[:26] + p.get('href'))
         return pd.DataFrame(result)
 
-kuznec = SuperJob('пескоструйщик')
-pprint(kuznec.search_result())
+
+
+
+kuznec = SuperJob('лесник')
+pprint(kuznec.get_link_href())

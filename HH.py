@@ -1,4 +1,4 @@
-
+import json
 from bs4 import BeautifulSoup as bs
 import requests
 from pprint import pprint
@@ -42,17 +42,17 @@ class HH:
             page_list = dom.find_all(class_='resume-search-item__name')
             for p in page_list:
                 result.append(str(p).split()[5][6:-1])
-        return pd.DataFrame(result)
+        return result
 
     def get_link_href(self): # тот же метод что и get_link только через get('href')
         result = []
         for i in range(self.search_result() // 50 + 1):
             self.params['page'] = i
             dom = bs(self.get_parce().text, "html.parser")
-            page_list = dom.find_all('a', {'data-qa' : 'vacancy-serp__vacancy-title'})
+            page_list = dom.find_all('a', {'data-qa': 'vacancy-serp__vacancy-title'})
             for p in page_list:
-                result.append(p.get('href'))
-        return pd.DataFrame(result)
+                result.append(p.get('href').split('?')[0])
+        return result
 
     def get_post(self): # парсит наименование вакансий
         result = []
@@ -62,7 +62,7 @@ class HH:
             page_list = dom.find_all(class_='resume-search-item__name')
             for i in page_list:
                 result.append(i.text)
-        return pd.DataFrame(result)
+        return result
 
     def pay(self):  # парсит зарплаты
         result = []
@@ -91,7 +91,7 @@ class HH:
         for i in result:
             if len(i) == 1:
                 i.append(i[0])
-        return pd.DataFrame(result)
+        return result
 
     def salary(self): # парсим валюту
         result = []
@@ -101,10 +101,14 @@ class HH:
                 result.append(i)
             else:
                 result.append(i[-4:])
-        return pd.DataFrame(result)
+        return result
+
+    def parce_id(self): # извлекаем id каждой вакансии
+        return [i.split('/')[4] for i in self.get_link_href()]
 
     def df_view(self): # объединяет данные в твблицу
-        return pd.concat([self.get_post(), self.get_link(), self.pay_iterate(), self.salary()], axis=1)
+        return pd.concat([pd.Series(self.parce_id()), pd.Series(self.get_post()), pd.Series(self.get_link()),
+                          pd.Series(self.pay_iterate()), pd.Series(self.salary())], axis=1)
 
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel(f'{self.search}.xlsx')
@@ -112,6 +116,13 @@ class HH:
     def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
         self.df_view().to_csv(f'{self.search}.csv')
 
+    # добавить метод преобразования dataframe в json
+    # извлечь id вакансий в href + изменить наименования столбцов
+    # импортировать json в mongo db
+    # переписать метод парсинга зарплат отдельный метод на мин зарплату, и отдельный метод на максимальную зарплату
+
 teacher = HH('учитель музыки')
-pprint(teacher.import_xls())
+result = teacher.df_view()
+pprint(result)
+
 

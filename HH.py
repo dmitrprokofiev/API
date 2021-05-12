@@ -25,14 +25,14 @@ class HH:
             response = requests.get(self.url, headers=self.headers, params=self.params)
             if response.status_code == 200:
                 return response
-            time.sleep(2)
+            time.sleep(1)
 
     def search_result(self): # выводит количество найденных вакансий
         dom = bs(self.get_parce().text, "html.parser")
         s_list = dom.find_all('h1', class_='bloko-header-1')
-        k = [[s for s in i.text if s.isdigit()] for i in s_list]
-        k = ''.join(k[0])
-        return int(k)
+        k = [i.text for i in s_list]
+        k = k[0].replace('\xa0', '')
+        return int(k[:k.index('в')])
 
     def get_link(self): # парсит ссылки вакансий через срезы
         result = []
@@ -97,18 +97,37 @@ class HH:
         result = []
         for i in self.pay():
             if i == None:
-                i = [None, None]
                 result.append(i)
             else:
                 result.append(i[-4:])
+        return result
+
+    def pay_min(self):
+        result = []
+        for i in self.pay_iterate():
+            if i[0] == None:
+                result.append(i[0])
+            else:
+                result.append(int(i[0]))
+        return result
+
+    def pay_max(self):
+        result = []
+        for i in self.pay_iterate():
+            if i[1] == None:
+                result.append(i[1])
+            else:
+                result.append(int(i[1]))
         return result
 
     def parce_id(self): # извлекаем id каждой вакансии
         return [i.split('/')[4] for i in self.get_link_href()]
 
     def df_view(self): # объединяет данные в твблицу
-        return pd.concat([pd.Series(self.parce_id()), pd.Series(self.get_post()), pd.Series(self.get_link()),
-                          pd.Series(self.pay_iterate()), pd.Series(self.salary())], axis=1)
+        data =  pd.concat([pd.Series(self.parce_id()), pd.Series(self.get_post()), pd.Series(self.get_link()),
+                          pd.Series(self.pay_min()), pd.Series(self.pay_min()), pd.Series(self.salary())], axis=1)
+        data.columns = ['id', 'name', 'link', 'pay_min', 'pay_max', 'salary']
+        return data
 
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel(f'{self.search}.xlsx')
@@ -121,8 +140,10 @@ class HH:
     # импортировать json в mongo db
     # переписать метод парсинга зарплат отдельный метод на мин зарплату, и отдельный метод на максимальную зарплату
 
-teacher = HH('учитель музыки')
-result = teacher.df_view()
+teacher = HH('python')
+result = teacher.search_result()
 pprint(result)
-
+# k = '147\xa0вакансий «rust»'
+# k = k.replace('\xa0', '')
+# pprint(k[:k.index('в')])
 

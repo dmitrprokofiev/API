@@ -23,9 +23,13 @@ class HeadHunter:
                   'showClusters' : 'true',
                   'page' : None}
 
-    params['text'] = 'python'
+    params['text'] = 'rust'
     response = requests.get(url, headers=headers, params=params)
     soup = bs(response.text, 'html.parser')
+
+    client = MongoClient('127.0.0.1', 27017)
+    db = client['users1105']
+    persons = db.persons
 
     def search_result(self): # выводит количество найденных вакансий
         s_list = self.soup.find_all('h1', class_='bloko-header-1')
@@ -114,6 +118,19 @@ class HeadHunter:
         data.columns = ['id', 'name', 'link', 'pay_min', 'pay_max', 'salary']
         return data
 
+    def import_xls(self): # импортирует, полученные данные в файл xlsx
+        self.df_view().to_excel('result.xlsx')
+
+    def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
+        self.df_view().to_csv('result.csv')
+
+    def load_json(self):
+        result = json.loads(self.df_view().T.to_json()).values()
+        return result
+
+    def into_mongo(self):
+        return self.persons.insert_many(self.load_json())
+
 teacher = HeadHunter()
-result = teacher.search_result()
+result = teacher.into_mongo()
 pprint(result)

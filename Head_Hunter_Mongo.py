@@ -18,12 +18,12 @@ class HeadHunter:
                   'showClusters' : 'true',
                   'page' : None}
 
-    params['text'] = 'rust'
+    params['text'] = 'python'
     response = requests.get(url, headers=headers, params=params)
     soup = bs(response.text, 'html.parser')
 
     client = MongoClient('127.0.0.1', 27017)
-    db = client['headhunter']
+    db = client['headhunter2']
     persons = db.persons
 
     def search_result(self): # выводит количество найденных вакансий
@@ -109,7 +109,7 @@ class HeadHunter:
 
     def df_view(self):  # объединяет данные в твблицу
         data = pd.concat([pd.Series(self.parce_id()), pd.Series(self.get_post()), pd.Series(self.get_link_href()),
-                          pd.Series(self.pay_min()), pd.Series(self.pay_min()), pd.Series(self.salary())], axis=1)
+                          pd.Series(self.pay_min()), pd.Series(self.pay_max()), pd.Series(self.salary())], axis=1)
         data.columns = ['_id', 'name', 'link', 'pay_min', 'pay_max', 'salary'] # называем столбцы
         return data
 

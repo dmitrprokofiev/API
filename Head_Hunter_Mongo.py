@@ -113,9 +113,6 @@ class HeadHunter:
         data.columns = ['_id', 'name', 'link', 'pay_min', 'pay_max', 'salary'] # называем столбцы
         return data
 
-    def import_xls(self): # импортирует, полученные данные в файл xlsx
-        self.df_view().to_excel('result.xlsx')
-
     def import_csv(self):
         self.df_view().to_csv('result.csv')
 

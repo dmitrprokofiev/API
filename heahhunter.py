@@ -121,7 +121,7 @@ class HeadHunter:
     def import_xls(self): # импортирует, полученные данные в файл xlsx
         self.df_view().to_excel('result.xlsx')
 
-    def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
+    def import_csv(self):
         self.df_view().to_csv('result.csv')
 
     def load_json(self):

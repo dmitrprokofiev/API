@@ -140,7 +140,7 @@ class HH:
 
 # teacher = HH('rust')
 # result = teacher.df_view()
-# record = json.loads(result.T.to_json()).values()
+# record = json.loads(result.T.to_json()).values()/
 # with open('outputfile', 'w') as fout:
 #     json.dump(record, fout)
 

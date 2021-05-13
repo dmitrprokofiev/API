@@ -12,7 +12,7 @@ class HeadHunter:
     #
     # def __init__(self, search):
     #     self.search = search
-    #     self.params['text'] = self.search
+    #     self.params['text'] = self.searchd
 
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
     url = 'https://hh.ru/search/vacancy?clusters=true'

@@ -5,6 +5,7 @@ from pprint import pprint
 import pandas as pd
 import time
 import openpyxl
+from pymongo import MongoClient
 
 class HH:
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
@@ -135,15 +136,22 @@ class HH:
     def import_csv(self): # есть проблема в присутствии спецсимвола   в зарплате
         self.df_view().to_csv(f'{self.search}.csv')
 
-    # добавить метод преобразования dataframe в json
-    # извлечь id вакансий в href + изменить наименования столбцов
-    # импортировать json в mongo db
-    # переписать метод парсинга зарплат отдельный метод на мин зарплату, и отдельный метод на максимальную зарплату
+  # написать метод добавления базы в mongodb
 
-teacher = HH('python')
-result = teacher.search_result()
-pprint(result)
-# k = '147\xa0вакансий «rust»'
-# k = k.replace('\xa0', '')
-# pprint(k[:k.index('в')])
+# teacher = HH('rust')
+# result = teacher.df_view()
+# record = json.loads(result.T.to_json()).values()
+# with open('outputfile', 'w') as fout:
+#     json.dump(record, fout)
 
+
+# client = MongoClient('127.0.0.1', 27017)
+#
+# db = client['users1105']
+#
+# persons = db.persons
+# #
+# # for i in record:
+# #     persons.insert_one(i)
+#
+# print()

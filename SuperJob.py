@@ -75,3 +75,4 @@ class SuperJob:
 
 kuznec = SuperJob('python')
 pprint(kuznec.search_result())
+#

@@ -28,7 +28,7 @@ class HeadHunter:
     soup = bs(response.text, 'html.parser')
 
     client = MongoClient('127.0.0.1', 27017)
-    db = client['users1105']
+    db = client['headhunter']
     persons = db.persons
 
     def search_result(self): # выводит количество найденных вакансий
@@ -115,7 +115,7 @@ class HeadHunter:
     def df_view(self):  # объединяет данные в твблицу
         data = pd.concat([pd.Series(self.parce_id()), pd.Series(self.get_post()), pd.Series(self.get_link_href()),
                           pd.Series(self.pay_min()), pd.Series(self.pay_min()), pd.Series(self.salary())], axis=1)
-        data.columns = ['id', 'name', 'link', 'pay_min', 'pay_max', 'salary']
+        data.columns = ['_id', 'name', 'link', 'pay_min', 'pay_max', 'salary']
         return data
 
     def import_xls(self): # импортирует, полученные данные в файл xlsx
@@ -129,7 +129,9 @@ class HeadHunter:
         return result
 
     def into_mongo(self):
-        return self.persons.insert_many(self.load_json())
+        for i in self.load_json():
+            if i not in [i for i in self.persons.find({})]:
+                self.persons.insert_one(i)
 
 teacher = HeadHunter()
 result = teacher.into_mongo()

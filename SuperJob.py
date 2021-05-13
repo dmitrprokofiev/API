@@ -73,5 +73,5 @@ class SuperJob:
         pass
 
 
-kuznec = SuperJob('лесник')
-pprint(kuznec.pay())
+kuznec = SuperJob('python')
+pprint(kuznec.search_result())

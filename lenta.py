@@ -19,9 +19,9 @@ def parce_news():
         new = {}
         names = el.xpath(".//div[@class='titles']//text()")
         link = el.xpath(".//div[@class='titles']//@href")
-        new['date'] = [i for i in el.xpath(".//span/span[1]//text()")]
-        new['link'] = [url+i if 'lenta' not in i else i for i in link]
-        new['names'] = [i.replace('\xa0', '') for i in names]
+        new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])
+        new['link'] = ''.join(url+i if 'lenta' not in i else i for i in link)
+        new['names'] = ''.join([i.replace('\xa0', '') for i in names])
         news.append(new)
     return news
 
@@ -32,7 +32,8 @@ def into_mongo(into):
 
 # parcing = parce_news()
 # into_mongo(parcing)
+pprint(parce_news())
 
-pprint([person for person in persons.find({})])
+# pprint([person for person in persons.find({})])
 
 

@@ -2,7 +2,6 @@ import requests
 from lxml import html
 from pymongo import MongoClient
 from pprint import pprint
-import hashlib
 
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
 url = 'https://lenta.ru'
@@ -34,4 +33,4 @@ def into_mongo(into):
 
 parcing = parce_news()
 into_mongo(parcing)
-pprint(len([s for s in persons.find({})]))
+pprint(len([s for s in persons.find({})])) # проверка на добавление не уникальных записей

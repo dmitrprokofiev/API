@@ -27,9 +27,6 @@ def parce_news():
         news.append(new)
     return news
 
-def id():
-    pass
-
 def into_mongo(into):
     for i in into:
         if i not in [s for s in persons.find({})]:

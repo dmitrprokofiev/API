@@ -2,6 +2,7 @@ import requests
 from lxml import html
 from pymongo import MongoClient
 from pprint import pprint
+import hashlib
 
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
 url = 'https://lenta.ru'
@@ -22,18 +23,18 @@ def parce_news():
         new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])
         new['link'] = ''.join(url+i if 'lenta' not in i else i for i in link)
         new['names'] = ''.join([i.replace('\xa0', '') for i in names])
+        new['_id'] = new['link'] # делаем id уникальным по ссылке для mongoDB
         news.append(new)
     return news
+
+def id():
+    pass
 
 def into_mongo(into):
     for i in into:
         if i not in [s for s in persons.find({})]:
             persons.insert_one(i)
 
-# parcing = parce_news()
-# into_mongo(parcing)
-pprint(parce_news())
-
-# pprint([person for person in persons.find({})])
-
-
+parcing = parce_news()
+into_mongo(parcing)
+pprint(len([s for s in persons.find({})]))

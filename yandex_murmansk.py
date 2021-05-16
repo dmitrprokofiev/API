@@ -18,7 +18,20 @@ class Yandex_Parce:
         else:
             raise ValueError
 
+#     def go_parce(self):
+#         news = []
+#         elements = self.go().xpath("//div[@class='mg-grid__col mg-grid__col_xs_8']")
+#         return elements
+#
+#
+# murmansk = Yandex_Parce('murmansk')
+# pprint(murmansk.go())
 
-
-murmansk = Yandex_Parce('murmansk')
-pprint(murmansk.go())
+headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
+url = "https://news.mail.ru/"
+response = requests.get(url, headers=headers)
+dom = html.fromstring(response.text)
+elements = dom.xpath("//ul//li")
+name = dom.xpath("//ul/li//text()")
+pprint(len(elements))
+pprint(len(name))

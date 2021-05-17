@@ -22,7 +22,7 @@ def parce_news():
         new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])
         new['link'] = ''.join(url+i if 'lenta' not in i else i for i in link)
         new['names'] = ''.join([i.replace('\xa0', '') for i in names])
-        new['_id'] = new['link'] # делаем id уникальным по ссылке для mongoDB
+        new['_id'] = new['link']  # делаем id уникальным по  id из ссылки сайта для mongoDB
         news.append(new)
     return news
 

@@ -36,7 +36,7 @@ def into_mongo(into):
          if i not in [s for s in persons.find({})]:
              persons.insert_one(i)
 
-
+#
 parcing = go_parce()
 into_mongo(parcing)
 pprint(len([s for s in persons.find({})])) # проверка на добавление не уникальных записей

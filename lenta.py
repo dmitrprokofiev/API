@@ -10,7 +10,7 @@ response = requests.get(url, headers=headers)
 dom = html.fromstring(response.text)
 
 client = MongoClient('127.0.0.1', 27017)
-db = client['news_lenta']
+db = client['news_lenta2']
 persons = db.persons
 
 def parce_news():
@@ -22,7 +22,7 @@ def parce_news():
         new['date'] = today.strftime("%m/%d/%Y")  # т.к. новости каждый день новые то присваиваем им сегодняшнюю дату
         names = el.xpath(".//div[@class='titles']//text()")
         link = el.xpath(".//div[@class='titles']//@href")
-        new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])
+        # new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])
         new['link'] = ''.join(url+i if 'lenta' not in i else i for i in link)
         new['names'] = ''.join([i.replace('\xa0', '') for i in names])
         new['_id'] = new['link']  # делаем id уникальным по  id из ссылки сайта для mongoDB

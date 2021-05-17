@@ -2,6 +2,7 @@ import requests
 from lxml import html
 from pymongo import MongoClient
 from pprint import pprint
+from datetime import datetime
 
 headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'}
 url = 'https://lenta.ru'
@@ -13,10 +14,12 @@ db = client['news_lenta']
 persons = db.persons
 
 def parce_news():
+    today = datetime.today()
     news = []
     elements = dom.xpath("//div[@class='span4']/section/div")
     for el in elements:
         new = {}
+        new['date'] = today.strftime("%m/%d/%Y")  # т.к. новости каждый день новые то присваиваем им сегодняшнюю дату
         names = el.xpath(".//div[@class='titles']//text()")
         link = el.xpath(".//div[@class='titles']//@href")
         new['date'] = ''.join([i for i in el.xpath(".//span/span[1]//text()")])

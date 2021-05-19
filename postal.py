@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 import time
 
 chrome_options = Options()
@@ -10,4 +11,10 @@ driver = webdriver.Chrome(executable_path='/home/dmitry/PycharmProjects/lesson_5
 
 driver.get("https://mail.ru/")
 
+form = driver.find_element_by_name('login')
+form.send_keys('study.ai_172')
+form.send_keys(Keys.ENTER)
 
+form = driver.find_element_by_name('password')
+form.send_keys('NextPassword172!')
+form.send_keys(Keys.ENTER)

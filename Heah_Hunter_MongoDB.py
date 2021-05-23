@@ -34,10 +34,10 @@ class Mongo_Hunter(HeadHunter):
         return mongoDB
 
     def import_mongo(self):
-        mongoDB = self.add_mongo()
-        for i in mongoDB:
-                if i not in [s for s in self.persons.find({})]:
-                        self.persons.insert_one(i)
+        BD = self.add_mongo()
+        for i in BD:
+            if i not in [s for s in self.persons.find({})]:
+                self.persons.insert_one(i)
 
 
 head = Mongo_Hunter()

@@ -23,7 +23,7 @@ class HeadHunter:
                   'showClusters' : 'true',
                   'page' : None}
 
-    params['text'] = 'c#'
+    params['text'] = 'rust'
     response = requests.get(url, headers=headers, params=params)
     soup = bs(response.text, 'html.parser')
 
@@ -134,10 +134,10 @@ class HeadHunter:
                         self.persons.insert_one(i)
 
 
-teacher = HeadHunter()
-result = teacher.into_mongo()
-pprint(result)
-#ggfg
+# teacher = HeadHunter()
+# result = teacher.into_mongo()
+# pprint(result)
+
 #TODO унаследовать класс НН, и переписать методы добавления инфы в БД
 #TODO реализовать оптимальный переход по страницам
 

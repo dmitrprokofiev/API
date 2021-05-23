@@ -23,7 +23,7 @@ class HeadHunter:
                   'showClusters' : 'true',
                   'page' : None}
 
-    params['text'] = 'rust'
+    params['text'] = 'c#'
     response = requests.get(url, headers=headers, params=params)
     soup = bs(response.text, 'html.parser')
 
@@ -31,10 +31,10 @@ class HeadHunter:
     db = client['users1105']
     persons = db.persons
 
-    def search_result(self): # выводит количество найденных вакансий
-        s_list = self.soup.find_all('h1', class_='bloko-header-1')
-        k = [i.text for i in s_list]
-        return int(''.join([i for i in k[0] if i.isdigit()]))
+    def search_result(self): # выводит количество страниц
+        s_list = self.soup.find_all('span', {'class' : 'bloko-button-group'})
+        result = [i.find_all('span', {"class" : ""}) for i in s_list]
+        return int(len(result[0])/2)
 
     def get_link_href(self): # извлекаем ссылки
         result = []
@@ -134,10 +134,9 @@ class HeadHunter:
                         self.persons.insert_one(i)
 
 
-# teacher = HeadHunter()
-# result = teacher.into_mongo()
-# pprint(result)
+teacher = HeadHunter()
+result = teacher.search_result()
+pprint(result)
 
-#TODO унаследовать класс НН, и переписать методы добавления инфы в БД
-#TODO реализовать оптимальный переход по страницам
+
 

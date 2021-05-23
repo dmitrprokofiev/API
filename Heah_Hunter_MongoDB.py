@@ -6,6 +6,9 @@ class Mongo_Hunter(HeadHunter):
         mongoDB = []
         page_list = self.soup.find_all('div', {'class': 'vacancy-serp-item'}) or \
                     self.soup.find_all('div', {'class': 'vacancy-serp-item vacancy-serp-item_premium'})
+
+        # TODO добавить метод перехода по страницам
+
         for p in page_list:
             mongo = {}
             mongo['link'] = p.find('a', {'class' : 'bloko-link'}).get('href').split('?')[0]
@@ -30,6 +33,13 @@ class Mongo_Hunter(HeadHunter):
             mongoDB.append(mongo)
         return mongoDB
 
+    def import_mongo(self):
+        mongoDB = self.add_mongo()
+        for i in mongoDB:
+                if i not in [s for s in self.persons.find({})]:
+                        self.persons.insert_one(i)
+
 
 head = Mongo_Hunter()
 pprint(head.add_mongo())
+

@@ -16,6 +16,7 @@ class HeadHunter:
 
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'}
     url = 'https://hh.ru/search/vacancy?clusters=true'
+    url_general = 'https://hh.ru'
     params = {'enable_snippets' : 'true',
                   'salary' : None,
                   'st' : 'searchVacancy',
@@ -23,7 +24,7 @@ class HeadHunter:
                   'showClusters' : 'true',
                   'page' : None}
 
-    params['text'] = 'c#'
+    params['text'] = 'rust'
     response = requests.get(url, headers=headers, params=params)
     soup = bs(response.text, 'html.parser')
 
@@ -38,12 +39,17 @@ class HeadHunter:
 
     def get_link_href(self): # извлекаем ссылки
         result = []
-        for i in range(self.search_result() // 50 + 1):
-            self.params['page'] = i
-            page_list = self.soup.find_all('a', {'data-qa': 'vacancy-serp__vacancy-title'})
-            for p in page_list:
-                result.append(p.get('href').split('?')[0])
-        return result
+        while True:
+            page = self.soup.find_all('a', {'data-qa': 'pager-next'})
+            while page:
+                page_list = self.soup.find_all('a', {'data-qa': 'vacancy-serp__vacancy-title'})
+                for p in page_list:
+                    result.append(p.get('href').split('?')[0])
+                self.params['page'] += 1
+                page = page
+            next_button = self.soup.find('a', {'data-qa':'pager-next'})
+            if next_button is None:
+                break
 
     def get_post(self): # извлекаем наименование вакансий
         result = []
@@ -133,10 +139,10 @@ class HeadHunter:
                 if i not in [s for s in self.persons.find({})]:
                         self.persons.insert_one(i)
 
-
-teacher = HeadHunter()
-result = teacher.search_result()
-pprint(result)
+#
+# teacher = HeadHunter()
+# result = teacher.search_result()
+# pprint(result)
 
 
 

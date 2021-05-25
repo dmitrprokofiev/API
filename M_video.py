@@ -36,6 +36,7 @@ scroll_down()
 bestsellers = driver.find_elements_by_css_selector("ul.accessories-product-list")
 for i in bestsellers:
     print(i.find_element_by_css_selector("a.fl-product-tile-title__link sel-product-tile-title").json())
+    #
 
 
 

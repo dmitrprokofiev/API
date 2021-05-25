@@ -30,9 +30,12 @@ def scroll_right():
         except:
             break
 
-def scrap():
-    new_product = driver.find_element_by_xpath("//div[@class='fl-product-tile__title-wrapper height-ready']")
-    return new_product
 
 scroll_down()
-print(scrap())
+
+bestsellers = driver.find_elements_by_css_selector("ul.accessories-product-list")
+for i in bestsellers:
+    print(i.find_element_by_css_selector("a.fl-product-tile-title__link sel-product-tile-title").json())
+
+
+

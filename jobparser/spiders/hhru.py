@@ -21,6 +21,6 @@ class HhruSpider(scrapy.Spider):
     def vacancy_parse(self, response: HtmlResponse):
         item_name = response.xpath("//h1/text()").extract_first()
         item_salary = response.xpath("//p/span[@data-qa='bloko-header-2']/text()").extract()
-
-        item = HhruItem(name=item_name, salary=item_salary)
+        item_link = response.url
+        item = HhruItem(name=item_name, salary=item_salary, link=item_link)
         yield item

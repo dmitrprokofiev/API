@@ -12,6 +12,8 @@ class JobparserItem(scrapy.Item):
     min_salary = scrapy.Field()
     max_salary = scrapy.Field()
     currency = scrapy.Field()
+    link = scrapy.Field()
+    _id = scrapy.Field()
 
 
 class HhruItem(scrapy.Item):
@@ -20,5 +22,6 @@ class HhruItem(scrapy.Item):
     min_salary = scrapy.Field()
     max_salary = scrapy.Field()
     currency = scrapy.Field()
+    link = scrapy.Field()
     _id = scrapy.Field()
 

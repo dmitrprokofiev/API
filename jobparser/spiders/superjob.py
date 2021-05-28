@@ -1,6 +1,6 @@
 import scrapy
 from scrapy.http import HtmlResponse
-from jobparser.items import HhruItem
+from jobparser.items import JobparserItem
 
 class SuperJob(scrapy.Spider):
     name = "superjob"
@@ -19,5 +19,6 @@ class SuperJob(scrapy.Spider):
     def vacancy_parse(self, response: HtmlResponse):
         item_name = response.xpath("//h1/text()").extract_first()
         item_salary = response.xpath("//span[@class='_1h3Zg _2Wp8I _2rfUm _2hCDz']/text()").extract()
-        item = HhruItem(name=item_name, salary=item_salary)
+        item_link = response.url
+        item = JobparserItem(name=item_name, salary=item_salary, link=item_link)
         yield item

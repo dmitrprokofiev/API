@@ -36,23 +36,28 @@ class JobparserPipeline:
                 item['currency'] = None
             del item["salary"]
         elif spider.name == "hhru":
-            # item['_id'] = int(item['link'].split('/')[4].split('?')[0])
-            # if len(item["salary"]) > 6:
-            #     item['min_salary'] = int(item['salary'][1].replace('\xa0', ''))
-            #     item['max_salary'] = int(item['salary'][3].replace('\xa0', ''))
-            #     item['currency'] = ''.join([i for i in item['salary'][5] if i.isalpha()])
-            # elif len(item["salary"]) == 4:
+            item['_id'] = int(item['link'].split('/')[4].split('?')[0])
+            if len(item["salary"]) > 6:
+                item['min_salary'] = int(item['salary'][1].replace('\xa0', ''))
+                item['max_salary'] = int(item['salary'][3].replace('\xa0', ''))
+                item['currency'] = ''.join([i for i in item['salary'][5] if i.isalpha()])
+            elif len(item["salary"]) == 5:
+                if item['salary'][0] == 'от':
+                    item['min_salary'] = int(item['salary'][1].replace('\xa0', ''))
+                    item['max_salary'] = None
+                    item['currency'] = ''.join([i for i in item['salary'][-2] if i.isalpha()])
+                else:
+                    item['min_salary'] = int(item['salary'][1].replace('\xa0', ''))
+                    item['max_salary'] = None
+                    item['currency'] = ''.join([i for i in item['salary'][-2] if i.isalpha()])
+            else:
+                item['min_salary'] = None
+                item['max_salary'] = None
+                item['currency'] = None
+            del item["salary"]
 
-            # else:
-            #     item['min_salary'] = None
-            #     item['max_salary'] = None
-            #     item['currency'] = None
-            # del item["salary"]
-            return item
-        print()
+        collection = self.mongobase[spider.name]
+        collection.insert_one(item)
 
-        # collection = self.mongobase[spider.name]
-        # collection.insert_one(item)
-
-        # return item
+        return item
 

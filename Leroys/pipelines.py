@@ -29,4 +29,5 @@ class LeroyPhotos(ImagesPipeline):
             item['photos'] = [i[1] for i in results if i[0]]
         return item
 
-    def file_path(self, request, response=None, info=None, *, item=None):
+    # def file_path(self, request, response=None, info=None, *, item=None):
+    #     pass

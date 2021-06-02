@@ -12,7 +12,7 @@ BOT_NAME = 'Leroys'
 SPIDER_MODULES = ['Leroys.spiders']
 NEWSPIDER_MODULE = 'Leroys.spiders'
 
-
+IMAGES_STORE = 'images'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
 
@@ -65,9 +65,10 @@ LOG_LEVEL = 'DEBUG'
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'Leroy.pipelines.LeroyPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'Leroys.pipelines.LeroyPipeline': 300,
+    'Leroys.pipelines.LeroyPhotos': 200
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

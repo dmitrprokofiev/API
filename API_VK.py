@@ -2,7 +2,7 @@ import requests
 from pprint import pprint
 
 class VK:
-    _acces_token = '7ae4381313757f207145b586be86dde0190155f74ceef9ad1a230d7c8e52742e8927abe03693eb5bb611d'
+    _acces_token = '####'
 
     def __init__(self, id):
         self.id = id
